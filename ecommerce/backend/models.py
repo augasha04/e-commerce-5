@@ -90,31 +90,25 @@ class Product(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String(100))
-    price = db.Column(db.Numeric)
     image_url = db.Column(db.String) 
     category = db.Column(db.String)
     stock = db.Column(db.Integer)
     rating = db.Column(db.Integer, default=0)
-    delivery_cost = db.Column(db.Integer)
-    mb = db.Column(db.Float)
-    cb = db.Column(db.Float)
+    
 
     eshops = db.relationship('Eshop', secondary=eshop_products, back_populates='products')
-
-    serialize_rules = ("-eshops.products", "-shopping_cart.product")
+    eshops_info = db.relationship('EshopProductInfo', back_populates='product')
+    serialize_rules = ("-eshops.products", "-shopping_cart.product", "-eshops_info.product")
 
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'price': self.price,
             'image_url': self.image_url,
             'category': self.category,
             'stock': self.stock,
-            'eshops': self.eshops,
-            'mb': self.mb,
-            'cb': self.cb
+           'rating': self.rating
         }
     
     def __repr__(self):
@@ -132,9 +126,8 @@ class Eshop(db.Model, SerializerMixin):
     email = db.Column(db.String, unique=True)
 
     products = db.relationship('Product', secondary=eshop_products, back_populates='eshops')
-    
-    serialize_rules = ("-products.eshops")
-
+    products_info = db.relationship('EshopProductInfo', back_populates='eshop')
+    serialize_rules = ("-products.eshops", "-products_info.eshop")
     def to_dict(self):
         return {
             'id': self.id,
@@ -201,3 +194,25 @@ class Order(db.Model,SerializerMixin):
     
     def __repr__(self):
         return f'User: {self.user_id}, ID: {self.id}, Total: {self.total}'
+    
+
+class EshopProductInfo(db.Model):
+    __tablename__ = 'eshop_product_info'
+
+    id = db.Column(db.Integer, primary_key=True)
+    eshop_id = db.Column(db.Integer, db.ForeignKey('eshops.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    price = db.Column(db.Numeric)  # Price of the product at the specific e-shop
+    delivery_cost = db.Column(db.Numeric)  # Delivery cost for the product at the specific e-shop
+
+    eshop = db.relationship('Eshop', back_populates='products_info')
+    product = db.relationship('Product', back_populates='eshops_info')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'eshop_id': self.eshop_id,
+            'product_id': self.product_id,
+            'price': self.price,
+            'delivery_cost': self.delivery_cost,
+        }
