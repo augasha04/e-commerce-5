@@ -196,7 +196,7 @@ class Order(db.Model,SerializerMixin):
         return f'User: {self.user_id}, ID: {self.id}, Total: {self.total}'
     
 
-class EshopProductInfo(db.Model):
+class EshopProductInfo(db.Model, SerializerMixin):
     __tablename__ = 'eshop_product_info'
 
     id = db.Column(db.Integer, primary_key=True)
