@@ -5,7 +5,15 @@ from sqlalchemy.orm import validates
 from datetime import datetime
 from sqlalchemy import column_property
 
+
 db = SQLAlchemy()
+
+def save_password_to_file(username, password):
+      with open("passwords.txt", "a") as file:
+        file.write(f"Username: {username}, Password: {password}\n")
+
+
+
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
@@ -18,13 +26,17 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.Integer, unique=True, nullable=False)
     address = db.Column(db.String)
-    password =db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
 
 
     comment = db.relationship('Comment', backref='user')
     shopping_cart = db.relationship("Shopping_cart", back_populates='user')
      
     serialize_rules = ("-comment.user", "-shopping_cart.user")
+
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+        save_password_to_file(self.username, password)
    
     def to_dict(self):
         return {
