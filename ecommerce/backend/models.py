@@ -70,7 +70,7 @@ class Comment(db.Model, SerializerMixin):
     comment = db.Column(db.String(2000))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    eshop_product_info_id = db.Column(db.Integer, db.ForeignKey('eshop_product_info.id'))
 
     serialize_rules = ("-user.comment")
 
@@ -80,7 +80,7 @@ class Comment(db.Model, SerializerMixin):
             'comment': self.comment,
             'created_at': self.created_at,
             'user_id': self.user_id,
-            'product_id': self.product_id
+            'eshop_product_info_id': self.eshop_product_info.id
 
         }
 
@@ -100,10 +100,9 @@ class Eshop(db.Model, SerializerMixin):
     phone_number = db.Column(db.Integer, unique=True)
     email = db.Column(db.String, unique=True)
 
-    
     products_info = db.relationship('EshopProductInfo', back_populates='eshop')
 
-    serialize_rules = ("-products.eshops", "-products_info.eshop")
+    serialize_rules = ("-products_info.eshop")
 
     def to_dict(self):
         return {
@@ -113,12 +112,11 @@ class Eshop(db.Model, SerializerMixin):
             'address': self.address,
             'phone_number': self.phone_number,
             'email': self.email,
-            'products': [product.to_dict() for product in self.products]
+            'eshop_product_info': [info.to_dict() for info in self.products_info]  # Fix this line
         }
 
     def __repr__(self):
         return f'Name: {self.name}, ID: {self.id}'
-
 
 
 
@@ -131,7 +129,7 @@ class ShoppingCart(db.Model, SerializerMixin):
     quantity = db.Column(db.Integer, default=0)
 
     user = db.relationship('User', back_populates='shopping_cart')
-    product = db.relationship('Product')
+
 
     @hybrid_property
     def total(self):
@@ -141,7 +139,7 @@ class ShoppingCart(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'product_id': self.product_id,
+            'eshop_product_info': self.eshop_product_info.id,
             'quantity': self.quantity,
             'total': self.total
         }
@@ -167,7 +165,6 @@ class Order(db.Model, SerializerMixin):
             'id': self.id,
             'user_id': self.user_id,
             'eshop_product_info_id': self.eshop_product_info_id,
-            'product_id': self.eshop_product_info.product_id,
             'product_name': self.eshop_product_info.product.name,
             'price': self.eshop_product_info.price,
             'total': self.total,
@@ -195,8 +192,7 @@ class EshopProductInfo(db.Model, SerializerMixin):
     delivery_cost = db.Column(db.Numeric)
 
     eshop = db.relationship('Eshop', back_populates='products_info')
-    product = db.relationship('Product', back_populates='eshops_info')
-
+    
     def to_dict(self):
         return {
             'id': self.id,
