@@ -49,18 +49,11 @@ class User(db.Model, SerializerMixin):
     @validates('email')
     def validates_email(self, key, email):
         if '@' not in email:
-            raise ValueError("Enter a valid email")
+            raise ValueError("Email should contain '@'")
         elif not email:
-            raise ValueError(f'{email} cannot be empty')
+            raise ValueError("Email cannot be empty")
         else:
             return email
-
-    @validates('username', 'first_name', 'second_name', 'date_of_birth', 'phone_number', 'address')
-    def validates_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        else:
-            return value
 
 
 class Comment(db.Model, SerializerMixin):
@@ -72,7 +65,7 @@ class Comment(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     eshop_product_info_id = db.Column(db.Integer, db.ForeignKey('eshop_product_info.id'))
 
-    serialize_rules = ("-user.comment")
+    serialize_rules = ("-user.comment",)
 
     def to_dict(self):
         return {
@@ -80,14 +73,11 @@ class Comment(db.Model, SerializerMixin):
             'comment': self.comment,
             'created_at': self.created_at,
             'user_id': self.user_id,
-            'eshop_product_info_id': self.eshop_product_info.id
-
+            'eshop_product_info_id': self.eshop_product_info_id
         }
 
     def __repr__(self):
         return f'Comment: {self.comment}, ID: {self.id}'
-
-
 
 
 class Eshop(db.Model, SerializerMixin):
@@ -129,7 +119,6 @@ class ShoppingCart(db.Model, SerializerMixin):
 
     user = db.relationship('User', back_populates='shopping_cart')
 
-
     @hybrid_property
     def total(self):
         return self.quantity * self.eshop_product_info.price
@@ -138,14 +127,13 @@ class ShoppingCart(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'eshop_product_info': self.eshop_product_info.to_dict(),  # Fix this line
+            'eshop_product_info': self.eshop_product_info.to_dict(),
             'quantity': self.quantity,
             'total': self.total
         }
 
     def __repr__(self):
         return f'Quantity: {self.quantity}, ID: {self.id}'
-
 
 
 class Order(db.Model, SerializerMixin):
@@ -165,7 +153,7 @@ class Order(db.Model, SerializerMixin):
             'id': self.id,
             'user_id': self.user_id,
             'eshop_product_info_id': self.eshop_product_info_id,
-            'product_name': self.eshop_product_info.product.name,
+            'product_name': self.eshop_product_info.name,
             'price': self.eshop_product_info.price,
             'total': self.total,
             'status': self.status,
@@ -176,6 +164,7 @@ class Order(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'User: {self.user_id}, ID: {self.id}, Total: {self.total}'
+
 
 class EshopProductInfo(db.Model, SerializerMixin):
     __tablename__ = 'eshop_product_info'
@@ -191,7 +180,7 @@ class EshopProductInfo(db.Model, SerializerMixin):
     delivery_cost = db.Column(db.Numeric)
 
     eshop = db.relationship('Eshop', back_populates='products_info')
-    
+
     def to_dict(self):
         return {
             'id': self.id,
