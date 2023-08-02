@@ -102,7 +102,7 @@ class Eshop(db.Model, SerializerMixin):
 
     products_info = db.relationship('EshopProductInfo', back_populates='eshop')
 
-    serialize_rules = ("-products_info.eshop")
+    serialize_rules = ("-products_info.eshop",)
 
     def to_dict(self):
         return {
@@ -112,12 +112,11 @@ class Eshop(db.Model, SerializerMixin):
             'address': self.address,
             'phone_number': self.phone_number,
             'email': self.email,
-            'eshop_product_info': [info.to_dict() for info in self.products_info]  # Fix this line
+            'eshop_product_info': [info.to_dict() for info in self.products_info]
         }
 
     def __repr__(self):
         return f'Name: {self.name}, ID: {self.id}'
-
 
 
 class ShoppingCart(db.Model, SerializerMixin):
@@ -139,13 +138,14 @@ class ShoppingCart(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'eshop_product_info': self.eshop_product_info.id,
+            'eshop_product_info': self.eshop_product_info.to_dict(),  # Fix this line
             'quantity': self.quantity,
             'total': self.total
         }
 
     def __repr__(self):
         return f'Quantity: {self.quantity}, ID: {self.id}'
+
 
 
 class Order(db.Model, SerializerMixin):
@@ -176,7 +176,6 @@ class Order(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'User: {self.user_id}, ID: {self.id}, Total: {self.total}'
-
 
 class EshopProductInfo(db.Model, SerializerMixin):
     __tablename__ = 'eshop_product_info'
