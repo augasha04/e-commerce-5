@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database_file_name.db'  # Replace with your database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecommerce.db'  # Replace with your database URI
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
