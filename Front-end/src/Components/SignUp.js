@@ -73,6 +73,7 @@ function SignUp(){
     )
     return(
         <form onSubmit={formik.handleSubmit}>
+            <div className='top'>
             <div className='card'>
                 <div class="card_title">
                     <h2>Create Account</h2>
@@ -179,6 +180,7 @@ function SignUp(){
                     id='submit'
                     />
                 </div>    
+            </div>
             </div>
         </form>
     )
