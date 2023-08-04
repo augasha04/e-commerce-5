@@ -34,6 +34,54 @@ def login():
         return jsonify(message="Invalid email or password"), 401
 
 
+@app.route('/signup/user', methods=['POST'])
+def signup_user():
+  if request.method == 'POST':
+      username = request.form['username']
+      first_name = request.form['first_name']
+      second_name = request.form['second_name']
+      email = request.form['email']
+      phone_number = request.form['phone_number']
+      address = request.form['address']
+      password = request.form['password']
+
+      user_data=User(username=username,
+                      first_name=first_name,
+                      second_name=second_name,
+                      email=email,
+                      phone_number=phone_number,
+                      address=address,
+                      password=password)
+
+      try:
+          db.session.add(user_data)
+          db.session.commit()
+          return "User added. User id={}".format(user_data.id)
+      except Exception as e:
+          return(str(e))
+
+@app.route('/signup/eshop', methods=['POST'])
+def signup_eshop():
+  if request.method == 'POST':
+      name=request.form['name']
+      logo_url=request.form['logo_url']
+      address=request.form['address']
+      phone_number=request.form['phone_number']
+      email=request.form['email']
+
+      eshop_data=Eshop(name=name,
+                       logo_url=logo_url,
+                       address=address,
+                       phone_number=phone_number,
+                       email=email)
+
+      try:
+          db.session.add(eshop_data)
+          db.session.commit()
+          return "Eshop added. Eshop id={}".format(eshop_data.id)
+      except Exception as e:
+          return(str(e))
+
 @app.route('/products', methods=['GET', 'POST'])
 def get_products():
     if request.method == 'GET':
