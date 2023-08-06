@@ -14,7 +14,7 @@
   .review-title {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #4caf50;
+    color: #4c61db;
   }
   
   /* Review list styles */
@@ -29,7 +29,7 @@
   }
   
   .review-list li strong {
-    color: #4caf50;
+    color: #7395df;
   }
   
   /* Form styles */
@@ -41,7 +41,7 @@
   
   .review-form label {
     margin-bottom: 5px;
-    color: #4caf50;
+    color: #4c56af;
   }
   
   .review-form input[type="text"],
@@ -54,7 +54,7 @@
   }
   
   .review-form button {
-    background-color: #4caf50;
+    background-color: #9097ff;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -63,6 +63,6 @@
   }
   
   .review-form button:hover {
-    background-color: #45a049;
+    background-color: #92b2ee;
   }
   
