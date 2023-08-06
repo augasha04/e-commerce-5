@@ -21,7 +21,7 @@ function Specs() {
           <li>Microsoft Office installed</li>
         </ul>
         </div>
-                
+
         <div className='m1'>
         <h3 className='card-heading'>MORE INFO</h3>
         <ul className='card-list'>
@@ -34,7 +34,7 @@ function Specs() {
         </ul>
         <div>
         <button class="button-48" role="button"><span class="text">Order Now</span></button>
-
+        <h4>price: USD 1500</h4>
         </div>
         </div>
         </div>
