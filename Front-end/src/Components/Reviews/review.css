@@ -1,0 +1,68 @@
+/* reviewComponent.css */
+
+/* Container styles */
+.review-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  /* Title styles */
+  .review-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #4caf50;
+  }
+  
+  /* Review list styles */
+  .review-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .review-list li {
+    margin-bottom: 10px;
+  }
+  
+  .review-list li strong {
+    color: #4caf50;
+  }
+  
+  /* Form styles */
+  .review-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .review-form label {
+    margin-bottom: 5px;
+    color: #4caf50;
+  }
+  
+  .review-form input[type="text"],
+  .review-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .review-form button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .review-form button:hover {
+    background-color: #45a049;
+  }
+  
