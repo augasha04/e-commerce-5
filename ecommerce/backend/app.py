@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request, make_response
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from models import db, User, EshopProductInfo, Comment, bcrypt
+from models import db, User, EshopProductInfo, Comment, bcrypt , Eshop 
 from flask_cors import CORS
 from werkzeug.security import check_password_hash
 
