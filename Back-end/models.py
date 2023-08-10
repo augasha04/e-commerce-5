@@ -8,6 +8,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from faker import Faker
 from sqlalchemy import func 
 import random
+import requests
 
 
 app = Flask(__name__)
